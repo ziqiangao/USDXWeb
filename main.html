@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ui.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: #030303;
+            margin: 0px;
+            padding: 0px;
+            width: 100dvw;
+            height: 100dvh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .fill {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+        }
+
+        .asert {
+            position: absolute;
+            margin: auto;
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #overlay {
+            z-index: 100;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lyric {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            width: 100%;
+            height: 7em;
+            transition: opacity 0.5s;
+        }
+
+        .lyric.bottom {
+            background-image: linear-gradient(to bottom, #001e, #335e);
+            border-top-left-radius: 3em;
+            border-top-right-radius: 3em;
+        }
+
+        .lyric.top {
+            background-image: linear-gradient(to top, #001e, #335e);
+            border-bottom-left-radius: 3em;
+            border-bottom-right-radius: 3em;
+        }
+
+        .block {
+            color: white;
+            font-size: 3em;
+            font-weight: 700;
+            font-family: "Noto Sans", sans-serif;
+            white-space: pre;
+        }
+
+        .freestyle {
+            font-style: italic;
+        }
+
+        .duetp1 {
+            color: lightblue;
+        }
+
+        .duetp2 {
+            color: pink;
+        }
+
+        .highlighting {
+            background-image: linear-gradient(to right, gold 0%, gold 50%, white 50%, white 100%);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .duetp1.highlighting {
+            background-image: linear-gradient(to right, dodgerblue 0%, dodgerblue 50%, lightblue 50%, lightblue 100%);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .duetp2.highlighting {
+            background-image: linear-gradient(to right, hotpink 0%, hotpink 50%, pink 50%, pink 100%);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .highlighted {
+            color: gold;
+        }
+
+        .duetp1.highlighted {
+            color: dodgerblue;
+        }
+
+        .duetp2.highlighted {
+            color: hotpink;
+        }
+
+        #debug {
+            position: absolute;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 4px;
+            font-size: 2em;
+            z-index: 10000000000000;
+            background-color: #0008;
+        }
+
+        .hide {
+            opacity: 0;
+        }
+    </style>
+    <span id="debug">Debug</span>
+    <div id="bgcontainer" class="fill">
+        <img id="bgimage" class="asert" />
+        <video id="bgvideo" class="asert" muted></video>
+    </div>
+    <div id="overlay" class="fill">
+        <div id="bottombar" class="lyric bottom hide">
+        </div>
+        <div id="topbar" class="lyric top hide">
+        </div>
+    </div>
+    <div id="curtain" class="fill"></div>
+    <div id="songselectoverlay" class="fill"></div>
+    <audio id="audio"></audio>
+    <script src="song.js"></script>
+    <script src="player.js"></script>
+    <script src="lyricdisplay.js"></script>
+    <script src="lyricsync.js"></script>
+    <script src="volnurmalize.js"></script>
+    <script src="main.js"></script>
+    <script src="songselect.js"></script>
+</body>
+
+</html>

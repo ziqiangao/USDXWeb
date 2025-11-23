@@ -1,0 +1,10 @@
+#curtain {
+    background-color: rgba(0, 0, 0, 1);
+    transition: 1s;
+    z-index: 10000;
+
+}
+
+#songselectoverlay {
+    z-index: 1000000;
+}
