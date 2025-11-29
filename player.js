@@ -120,3 +120,18 @@ function setvolume(vol) {
     if (typeof gainnode !== "undefined") {gainnode.gain.value = vol} else {audio.volume = vol}
     
 }
+
+audio.onpause = () => {
+    pauseplayer()
+}
+
+audio.onplay = () => {
+    startplayer()
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        pauseplayer()
+    } else {
+    }
+});

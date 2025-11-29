@@ -38,7 +38,7 @@ function snapback() {
     void cardcontainer.offsetWidth;
 
     // Reapply the transition
-    cardcontainer.style.transition = "transform 0.2s";
+    cardcontainer.style.transition = "";
     c = mod(c, 7)
     active = mod(active, Songs.length)
 }

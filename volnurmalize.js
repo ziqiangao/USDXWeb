@@ -1,8 +1,9 @@
 let created = false
 let gainnode
+let ctx 
 function volnormanize() {
     if (!created) {
-        const ctx = new AudioContext()
+        ctx = new AudioContext()
         const media = ctx.createMediaElementSource(audio)
         const gain = ctx.createGain()
         

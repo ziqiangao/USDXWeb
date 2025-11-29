@@ -44,10 +44,10 @@ async function commitplay(song) {
     setTimeout(async () => {
         await loadSongOntoPlayer(song)
         cardcontainer.style.opacity = 0
+        setcurtainopacity(0)
         setTimeout(() => {
             sync(song.getmetadata().START || "0")
             showlyrics = true
-            setcurtainopacity(0)
             startplayer()
             fadevolume(1, 100)
         }, 500)
