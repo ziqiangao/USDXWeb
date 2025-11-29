@@ -44,6 +44,9 @@ function settext(text = ["We ", "are"], type = [":", ":"], pos = 0, player = 0) 
         if ("GRF".includes(type[i])) {
             block.classList.add("freestyle")
         }
+        if ("G*".includes(type[i])) {
+            block.classList.add("golden")
+        }
         ele.appendChild(block)
         i++
     }
