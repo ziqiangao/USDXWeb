@@ -29,7 +29,6 @@ async function startpreview(song) {
         startplayer()
         fadevolume(.5)
     }, 200)
-
 }
 
 function stoppreview() {
