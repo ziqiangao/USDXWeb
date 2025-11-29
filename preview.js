@@ -17,7 +17,9 @@ async function startpreview(song) {
         if (med) {
             sync(song.beattoseconds(med[0]) - 1)
         } else {
-            sync(audio.duration / 4 - 1)
+            const start = song.getmetadata().START ? song.getmetadata().START.replace(",", ".") : "0"
+            const totaldur = parseInt(song.getmetadata().END || audio.duration * 1000) / 1000 - parseFloat(start)
+            sync(parseFloat(start) + totaldur / 4 - 1)
         }
     }
     setTimeout(() => {
