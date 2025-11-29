@@ -20,27 +20,39 @@ document.addEventListener("contextmenu", async (event) => {
         //console.log(folder)
         if (folder[1] instanceof FileSystemDirectoryHandle) {
             let song = new Song(folder[1])
-            await song.parse()
-            await song.storeblobs()
             Songs.push(song)
+            await song.parse()
+            await song.storefilepointers()
         }
     }
-
+    loadsongsontocards(0)
 })
 
 
-document.addEventListener('keydown', function (event) {
-    // Check if the pressed key is "r" or "R"
-    if (event.key.toLowerCase() === 'r') {
-        loadSongOntoPlayer(Songs[Math.floor(Math.random() * Songs.length)])
-    sync(currentjson.metadata.START || "0")
-    startplayer()
-    }
+document.addEventListener("keydown", (event) => {
+    if (!Songs.length) return
+    
 
-    if (event.key.toLowerCase() === 'o') {
-        setcurtainopacity(0)
-    }
-    if (event.key.toLowerCase() === 'i') {
-        setcurtainopacity(1)
+    // Handle left/right arrow keys
+    switch (event.key) {
+        case "ArrowLeft":
+            if (songon) return
+            clearTimeout(timer)
+            scrollleft();
+            break;
+        case "ArrowRight":
+            if (songon) return
+            clearTimeout(timer)
+            scrollright();
+            break;
+        case "Enter":
+            if (songon) return
+            clearTimeout(timer)
+            commitplay(Songs[active])
+            break
+        case "Backspace":
+            if (!songon) return
+            stopplay()
+            break
     }
 });

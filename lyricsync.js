@@ -7,19 +7,27 @@ let prevtext1, prevtext2
 
 function loop() {
     if (!showlyrics) {
-        showbars(false,false)
+        showbars(false, false)
         requestAnimationFrame(loop)
         return
     }
+    if (audio.currentTime * 1000 > parseInt(currentsong?.getmetadata()?.END || "9999999")) stopplay()
     if (currentjson) {
-        bpm = currentjson.metadata["BPM"] || 60
+        bpm = parseFloat(currentjson.metadata["BPM"].replace(',', '.')) || 60
         beat = (audio.currentTime - currentjson.metadata["GAP"] / 1000) * (bpm * 4 / 60)
 
         getcurrentlyrics(beat)
     }
     requestAnimationFrame(loop)
 }
-requestAnimationFrame(loop)
+
+
+let e = setInterval(() => {
+    if (typeof settext === "function") {
+        requestAnimationFrame(loop)
+        clearInterval(e)
+    }
+}, 500)
 
 function getcurrentlyrics(beat = -100) {
     if (!currentjson) return;

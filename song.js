@@ -8,22 +8,22 @@ class Song {
     /** @type {Object} */
     #parsedjson;
 
-    /** @type {Blob} */
+    /** @type {FileSystemFileHandle} */
     #audio;
 
-    /** @type {?Blob} */
+    /** @type {?FileSystemFileHandle} */
     #video;
 
-    /** @type {?Blob} */
+    /** @type {?FileSystemFileHandle} */
     #instrumental;
 
-    /** @type {?Blob} */
+    /** @type {?FileSystemFileHandle} */
     #vocals;
 
-    /** @type {?Blob} */
+    /** @type {?FileSystemFileHandle} */
     #cover;
 
-    /** @type {?Blob} */
+    /** @type {?FileSystemFileHandle} */
     #background;
 
     /**
@@ -116,36 +116,32 @@ class Song {
         }
     }
 
-    async #getblobfromfilename(name = "") {
-        const file = await this.#folder.getFileHandle(name)
-        return await file.getFile()
-    }
-
-    async storeblobs() {
-
+    async storefilepointers() {
+        if (!this.#parsedjson) throw "JSON Not Loaded"
         for (const key of Object.keys(this.#parsedjson.metadata)) {
+            const value = this.#parsedjson.metadata[key]
             try {
-                const value = this.#parsedjson.metadata[key]
+
                 if (key == "AUDIO" || key == "MP3") {
-                    this.#audio = await this.#getblobfromfilename(value)
+                    this.#audio = await this.#folder.getFileHandle(value)
                 }
                 if (key == "VIDEO") {
-                    this.#video = await this.#getblobfromfilename(value)
+                    this.#video = await this.#folder.getFileHandle(value)
                 }
                 if (key == "COVER") {
-                    this.#cover = await this.#getblobfromfilename(value)
+                    this.#cover = await this.#folder.getFileHandle(value)
                 }
                 if (key == "BACKGROUND") {
-                    this.#background = await this.#getblobfromfilename(value)
+                    this.#background = await this.#folder.getFileHandle(value)
                 }
                 if (key == "VOCALS") {
-                    this.#vocals = await this.#getblobfromfilename(value)
+                    this.#vocals = await this.#folder.getFileHandle(value)
                 }
                 if (key == "INSTRUMENTAL") {
-                    this.#instrumental = await this.#getblobfromfilename(value)
+                    this.#instrumental = await this.#folder.getFileHandle(value)
                 }
             } catch {
-                console.warn(`File could not be loaded`)
+                console.warn(`File ${value} could not be loaded, "${this.#parsedjson.metadata.TITLE}"`)
             }
         }
     }
@@ -155,28 +151,156 @@ class Song {
      * @param {String} type 
      * @returns {?File}
      */
-    getresource(type) {
+    async getresource(type) {
         switch (type.toLowerCase()) {
             case "vocals":
-                return this.#vocals
+                if (!this.#vocals) return null
+                return this.#vocals.getFile()
             case "instrumental":
-                return this.#instrumental
+                if (!this.#instrumental) return null
+                return this.#instrumental.getFile()
             case "video":
-                return this.#video
+                if (!this.#video) return null
+                return this.#video.getFile()
             case "audio":
-                return this.#audio
+                if (!this.#audio) return null
+                return this.#audio.getFile()
             case "cover":
-                return this.#cover
+                if (!this.#cover) return null
+                return this.#cover.getFile()
             case "background":
-                return this.#background
+                if (!this.#background) return null
+                return this.#background.getFile()
+            default:
+                return null
         }
     }
 
     getjson() {
+        if (!this.#parsedjson) throw "JSON Not Loaded"
         return this.#parsedjson
     }
 
     isduet() {
+        if (!this.#parsedjson) throw "JSON Not Loaded"
         return this.#parsedjson.lyrics.p1.length > 0 && this.#parsedjson.lyrics.p2.length > 0
+    }
+
+    getlyrics() {
+        if (!this.#parsedjson) throw "JSON Not Loaded"
+        return this.#parsedjson.lyrics
+    }
+
+    getmetadata() {
+        if (!this.#parsedjson) throw "JSON Not Loaded"
+        return this.#parsedjson.metadata
+    }
+
+    getLineAt(line, player) {
+        let accum = 0;
+        let accumarray = [];
+        let idx = 0;
+
+        // Find the start of the requested line
+        while (accum < line) {
+            if (idx >= this.#parsedjson.lyrics[player].length) return null; // prevent overflow
+            let block = this.#parsedjson.lyrics[player][idx];
+            if (block.type == "-") accum++;
+            idx++;
+        }
+
+        // Collect words for this line
+        while (idx < this.#parsedjson.lyrics[player].length && this.#parsedjson.lyrics[player][idx].type != "-") {
+            accumarray.push(this.#parsedjson.lyrics[player][idx]);
+            idx++;
+        }
+
+        return accumarray;
+    }
+
+    getLineAsString(line, player) {
+        let accum = 0;
+        let accumstring = "";
+        let idx = 0;
+
+        // Find the start of the requested line
+        while (accum < line) {
+            if (idx >= this.#parsedjson.lyrics[player].length) return null; // prevent overflow
+            let block = this.#parsedjson.lyrics[player][idx];
+            if (block.type == "-") accum++;
+            idx++;
+        }
+
+        // Collect words for this line
+        while (idx < this.#parsedjson.lyrics[player].length && this.#parsedjson.lyrics[player][idx].type != "-") {
+            accumstring += this.#parsedjson.lyrics[player][idx].word;
+            idx++;
+        }
+
+        return accumstring;
+    }
+
+    /**
+     * Get all lines of lyrics for a player
+     * @param {"base"|"p1"|"p2"} player - which player's lyrics
+     * @returns {String[]} array of lyric lines
+     */
+    getAllLines(player) {
+        const lyrics = this.#parsedjson.lyrics[player];
+        const lines = [];
+        let lineAccumulator = "";
+
+        for (const block of lyrics) {
+            if (block.type === "-") {
+                if (lineAccumulator) {
+                    lines.push(lineAccumulator);
+                    lineAccumulator = "";
+                }
+            } else {
+                lineAccumulator += block.word;
+            }
+        }
+
+        // Push the last line if it doesn't end with "-"
+        if (lineAccumulator) lines.push(lineAccumulator);
+
+        return lines;
+    }
+
+
+    /**
+     * Get all lines of lyrics for a player
+     * @param {"base"|"p1"|"p2"} player - which player's lyrics
+     * @returns {String[]} array of lyric lines
+     */
+    getAllLinesAsObjects(player) {
+        const lyrics = this.#parsedjson.lyrics[player];
+        const lines = [];
+        let lineAccumulator = [];
+
+        for (const block of lyrics) {
+            if (block.type === "-") {
+                if (lineAccumulator) {
+                    lines.push(lineAccumulator);
+                    lineAccumulator = [];
+                }
+            } else {
+                lineAccumulator.push(block);
+            }
+        }
+
+        // Push the last line if it doesn't end with "-"
+        if (lineAccumulator) lines.push(lineAccumulator);
+
+        return lines;
+    }
+
+    /**
+     * 
+     * @param {number} beat 
+     * @returns {number}
+     */
+    beattoseconds(beat) {
+        return (this.#parsedjson.metadata.GAP / 1000) + (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
     }
 }

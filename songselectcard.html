@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            font-family: "Noto Sans", sans-serif;
+            color: #fff;
+        }
+
+        body {
+            background-color: #020202;
+            margin: 0;
+        }
+
+        .card {
+            width: 15dvw;
+            aspect-ratio: 0.6;
+            max-height: 80%;
+            display: block;
+            transition-property: width, opacity;
+            transition-duration: 0.2s;
+            margin: 1vmin;
+            z-index: 1000;
+        }
+
+        .cover {
+            position: relative;
+            border-radius: 2vmin 2vmin;
+            width: 100%;
+            aspect-ratio: 1;
+            z-index: 1;
+            transition-property: border-radius;
+            transition-duration: 0.3s;
+
+            background-image: url("[main]songCover.png");
+            background-size: cover;
+            /* fill the box */
+            background-repeat: no-repeat;
+            /* stop tiling */
+            background-position: centre;
+            /* keep it centred */
+        }
+
+        .info {
+            position: relative;
+            background-image: linear-gradient(30deg, #012, #024);
+            border-radius: 0 0 2vmin 2vmin;
+            height: 40%;
+            width: 100%;
+            top: -40%;
+            transition-property: top;
+            transition-duration: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card.active {
+            width: 20dvw;
+        }
+
+        .card.active>.info {
+            top: 0%;
+        }
+
+        .card.active>.cover {
+            border-radius: 2vmin 2vmin 0 0;
+        }
+
+        #songselectoverlay {
+            width: 100dvw;
+            height: 100dvh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0;
+        }
+
+        .textcontainer {
+            width: 96%;
+            height: 67%;
+            padding: 2%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .iconcontainer {
+            width: 94%;
+            height: 33%;
+            padding: 3%;
+        }
+
+        .title {
+            font-size: xx-large;
+            font-weight: 700;
+        }
+
+        .artist {
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        .edge {
+            opacity: 0.5;
+            width: 10dvw;
+        }
+
+        .preload {
+            width: 0dvw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="songselectoverlay">
+        
+    </div>
+</body>
+<script>
+    const cardcontainer = document.getElementById().children
+    function setactive() {
+        cardcontainer[3].classList.remove(active)
+    }
+</script>
+</html>

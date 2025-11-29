@@ -1,10 +1,122 @@
 #curtain {
-    background-color: rgba(0, 0, 0, 1);
-    transition: 1s;
+    background-color: #000;
+    transition: opacity 1s;
     z-index: 10000;
-
 }
 
 #songselectoverlay {
     z-index: 1000000;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    transition: opacity 1s, transform 0.1s;
+}
+
+* {
+    font-family: "Noto Sans", sans-serif;
+    color: #fff;
+}
+
+body {
+    background-color: #020202;
+    margin: 0;
+}
+
+.card {
+    width: 15dvw;
+    aspect-ratio: 0.6;
+    max-height: 80%;
+    display: block;
+    transition-property: transform, opacity;
+    transition-duration: 0.1s;
+    margin: 1vmin;
+    z-index: 1000;
+}
+
+.cover {
+    position: relative;
+    border-radius: 1.5vmin 1.5vmin;
+    width: 100%;
+    aspect-ratio: 1;
+    z-index: 1;
+    transition-property: border-radius;
+    transition-duration: 0.1s;
+
+    background-image: url("[main]songCover.png");
+    background-size: cover;
+    /* fill the box */
+    background-repeat: no-repeat;
+    /* stop tiling */
+    background-position: centre;
+    /* keep it centred */
+}
+
+.info {
+    position: relative;
+    background-image: linear-gradient(30deg, #012, #024);
+    border-radius: 0 0 1.5vmin 1.5vmin;
+    height: 40%;
+    width: 100%;
+    top: -40%;
+    transition-property: top;
+    transition-duration: 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card.active {
+    transform: scale(1.2);
+}
+
+.card.active>.info {
+    top: 0%;
+}
+
+.card.active>.cover {
+    border-radius: 1.5vmin 1.5vmin 0 0;
+}
+
+.textcontainer {
+    width: 96%;
+    height: 80%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.iconcontainer {
+    width: 94%;
+    height: 20%;
+    padding: 3%;
+}
+
+.title {
+    font-size: x-large;
+    font-weight: 700;
+}
+
+.artist {
+    color: #ddd;
+    font-weight: 600;
+}
+
+.title, .artist {
+    display: -webkit-box;       /* Required for line clamping */
+    -webkit-box-orient: vertical; /* Required for line clamping */
+    line-clamp: 2;
+    -webkit-line-clamp: 2;      /* Number of lines to show */
+    overflow: hidden;            /* Hide the rest */
+    text-overflow: ellipsis;     /* Add the ellipsis */
+}
+
+.edge {
+    opacity: 0.7;
+    transform: scale(0.8);
+}
+
+.preload {
+    transform: scale(0);
 }
