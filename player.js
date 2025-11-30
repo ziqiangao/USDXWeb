@@ -126,7 +126,7 @@ audio.onpause = () => {
 }
 
 audio.onplay = () => {
-    startplayer()
+    seek(0)
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -135,3 +135,7 @@ document.addEventListener("visibilitychange", () => {
     } else {
     }
 });
+
+function finished() {
+    stopplay()
+}
