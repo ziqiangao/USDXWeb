@@ -81,7 +81,7 @@ body {
 .textcontainer {
     width: 96%;
     height: 80%;
-    padding: 2%;
+    padding: 0% 2%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -90,7 +90,7 @@ body {
 .iconcontainer {
     width: 94%;
     height: 20%;
-    padding: 3%;
+    padding: 0% 3%;
 }
 
 .title {
@@ -119,4 +119,16 @@ body {
 
 .preload {
     transform: scale(0);
+}
+
+.iconcontainer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.icon {
+    aspect-ratio: 1;
+    height: 100%;
+    margin: 1% 3%;
 }

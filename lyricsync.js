@@ -11,7 +11,7 @@ function loop() {
         requestAnimationFrame(loop)
         return
     }
-    if (audio.currentTime * 1000 > parseInt(currentsong?.getmetadata()?.END || "9999999")) stopplay()
+    if (audio.currentTime * 1000 > parseInt(currentsong?.getmetadata()?.END || "999999999")) finished()
     if (currentjson) {
         bpm = parseFloat(currentjson.metadata["BPM"].replace(',', '.')) || 60
         beat = (audio.currentTime - currentjson.metadata["GAP"] / 1000) * (bpm * 4 / 60)
@@ -29,6 +29,9 @@ let e = setInterval(() => {
     }
 }, 500)
 
+let currentblockbase
+let currentblockp1
+let currentblockp2
 function getcurrentlyrics(beat = -100) {
     if (!currentjson) return;
 
@@ -54,28 +57,48 @@ function getcurrentlyrics(beat = -100) {
 
     showbars(!hideBars, !hideBars && isduet); // hide if finished
 
-    if (hideBars) return; // stop further highlighting
+    if (hideBars) {
+        // clear current block variables when hidden
+        currentblockbase = null;
+        currentblockp1 = null;
+        currentblockp2 = null;
+        return; // stop further highlighting
+    }
 
     if (isduet) {
-        let idx = getlinebreakattime(beat, currentjson.lyrics.p1)
-        let line = getline(idx, currentjson.lyrics.p1)
-        if (line[0] !== prevtext1) settext(line[0], line[1], 0, 1); prevtext1 = line[0]
-        let highlight = getwordtime(beat, line[2])
-        sethighlight(highlight[0], highlight[1], 0)
+        // P1
+        let idx = getlinebreakattime(beat, currentjson.lyrics.p1);
+        let line = getline(idx, currentjson.lyrics.p1);
+        if (line[0] !== prevtext1) settext(line[0], line[1], 0, 1);
+        prevtext1 = line[0];
+        let highlight = getwordtime(beat, line[2]);
+        // set the current block variable to the highlighted lyric object (or null)
+        currentblockp1 = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
+        sethighlight(highlight[0], highlight[1], 0);
 
-        idx = getlinebreakattime(beat, currentjson.lyrics.p2)
-        line = getline(idx, currentjson.lyrics.p2)
-        if (line[0] !== prevtext2) settext(line[0], line[1], 1, 2); prevtext2 = line[0]
-        highlight = getwordtime(beat, line[2])
-        sethighlight(highlight[0], highlight[1], 1)
+        // P2
+        idx = getlinebreakattime(beat, currentjson.lyrics.p2);
+        line = getline(idx, currentjson.lyrics.p2);
+        if (line[0] !== prevtext2) settext(line[0], line[1], 1, 2);
+        prevtext2 = line[0];
+        highlight = getwordtime(beat, line[2]);
+        currentblockp2 = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
+        sethighlight(highlight[0], highlight[1], 1);
     } else {
-        let idx = getlinebreakattime(beat, currentjson.lyrics.base)
-        let line = getline(idx, currentjson.lyrics.base)
-        if (line[0] !== prevtext1) settext(line[0], line[1], 0, 0); prevtext1 = line[0]
-        let highlight = getwordtime(beat, line[2])
-        sethighlight(highlight[0], highlight[1], 0)
+        let idx = getlinebreakattime(beat, currentjson.lyrics.base);
+        let line = getline(idx, currentjson.lyrics.base);
+        if (line[0] !== prevtext1) settext(line[0], line[1], 0, 0);
+        prevtext1 = line[0];
+        let highlight = getwordtime(beat, line[2]);
+        currentblockbase = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
+        sethighlight(highlight[0], highlight[1], 0);
+
+        // clear duet-specific block vars
+        currentblockp1 = null;
+        currentblockp2 = null;
     }
 }
+
 
 
 function getlinebreakattime(time = 0, lyrics = []) {
@@ -132,35 +155,60 @@ function getwordtime(beat = 0, lyricblock = []) {
     }
 
     // before first word
-    if (beat < lyricblock[0].time) return [0, 0];
+    if (beat < lyricblock[0].time) return [-1, 0];
 
     const lastIndex = lyricblock.length - 1;
+
     // after last word -> return last word with completed progress
     if (beat >= lyricblock[lastIndex].time + lyricblock[lastIndex].duration) {
         return [lastIndex, 1];
     }
 
-    // find current word index (advance while beat >= end of the word)
+    // Find index of the first word whose start is greater than beat
+    let nextIndex = 0;
+    while (nextIndex < lyricblock.length && beat >= lyricblock[nextIndex].time) {
+        nextIndex++;
+    }
+
+    // nextIndex is the index of the next word (start > beat), or lyricblock.length
+    if (nextIndex === 0) return [0, 0]; // defensive, should be handled above
+
+    const prevIndex = nextIndex - 1;
+    const prev = lyricblock[prevIndex];
+
+    // If beat is within the previous word's duration, compute normal progress
+    if (beat < prev.time + prev.duration) {
+        let progress;
+        if (prev.duration <= 0) {
+            progress = beat >= prev.time ? 1 : 0;
+        } else {
+            progress = (beat - prev.time) / prev.duration;
+        }
+        progress = Math.max(0, Math.min(1, progress));
+        return [prevIndex, progress];
+    }
+
+    // If beat is after prev end but before next start => hold prev at 1
+    if (nextIndex < lyricblock.length) {
+        const next = lyricblock[nextIndex];
+        if (beat < next.time) {
+            return [prevIndex, 1];
+        }
+    }
+
+    // Fallback: find the current word by scanning (shouldn't normally reach here)
     let i = 0;
     while (i < lyricblock.length && beat >= (lyricblock[i].time + lyricblock[i].duration)) {
         i++;
     }
-
-    // safety clamp
     if (i >= lyricblock.length) return [lastIndex, 1];
-    if (i < 0) i = 0;
-
     const word = lyricblock[i];
-    // handle zero/negative durations: treat as instant -> progress = 1 if beat >= start, else 0
     let progress;
     if (word.duration <= 0) {
         progress = beat >= word.time ? 1 : 0;
     } else {
         progress = (beat - word.time) / word.duration;
     }
-
-    // clamp progress to [0,1]
     progress = Math.max(0, Math.min(1, progress));
-
     return [i, progress];
 }
