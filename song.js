@@ -148,29 +148,29 @@ class Song {
 
     /**
      * 
-     * @param {String} type 
+     * @param {"vocals"|"instrumental"|"video"|"audio"|"cover"|"background"} type 
      * @returns {?File}
      */
     async getresource(type) {
         switch (type.toLowerCase()) {
             case "vocals":
                 if (!this.#vocals) return null
-                return this.#vocals.getFile()
+                return await this.#vocals.getFile()
             case "instrumental":
                 if (!this.#instrumental) return null
-                return this.#instrumental.getFile()
+                return await this.#instrumental.getFile()
             case "video":
                 if (!this.#video) return null
-                return this.#video.getFile()
+                return await this.#video.getFile()
             case "audio":
                 if (!this.#audio) return null
-                return this.#audio.getFile()
+                return await this.#audio.getFile()
             case "cover":
                 if (!this.#cover) return null
-                return this.#cover.getFile()
+                return await this.#cover.getFile()
             case "background":
                 if (!this.#background) return null
-                return this.#background.getFile()
+                return await this.#background.getFile()
             default:
                 return null
         }
@@ -271,7 +271,7 @@ class Song {
     /**
      * Get all lines of lyrics for a player
      * @param {"base"|"p1"|"p2"} player - which player's lyrics
-     * @returns {String[]} array of lyric lines
+     * @returns {[Object[]]} array of lyric lines
      */
     getAllLinesAsObjects(player) {
         const lyrics = this.#parsedjson.lyrics[player];
@@ -302,5 +302,14 @@ class Song {
      */
     beattoseconds(beat) {
         return (this.#parsedjson.metadata.GAP / 1000) + (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
+    }
+
+    /**
+     * 
+     * @param {number} beat 
+     * @returns {number}
+     */
+    beattoseclength(beat) {
+        return (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
     }
 }
