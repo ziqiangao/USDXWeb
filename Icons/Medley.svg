@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Flat"
+   viewBox="0 0 64 64"
+   version="1.1"
+   sodipodi:docname="music_notes_icon_173701.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs187" />
+  <sodipodi:namedview
+     id="namedview185"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.0546875"
+     inkscape:cx="43.602581"
+     inkscape:cy="42.694194"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Flat" />
+  <path
+     d="M 63.999983,2.370664 V 43.827097 A 11.532765,10.678694 0 1 1 58.883174,34.971915 V 17.248246 l -35.81766,8.291287 v 27.76332 A 11.532765,10.678694 0 1 1 17.948705,44.447671 V 11.84642 A 2.5574003,2.3680092 0 0 1 19.887497,9.5491945 L 60.821965,0.07343879 a 2.5251452,2.3381428 0 0 1 2.193633,0.43029704 2.5632815,2.3734548 0 0 1 0.984385,1.86692817 z"
+     id="path182"
+     style="stroke-width:0.307731" />
+</svg>
