@@ -56,7 +56,7 @@ document.addEventListener("keydown", (event) => {
             break
         case " ":
             if (!songon) return
-            if (!audio.paused) audio.pause(); else audio.play()
+            if (!audio.paused) pauseplayer(); else startplayer()
             break
     }
 });
