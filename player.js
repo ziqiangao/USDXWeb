@@ -31,7 +31,6 @@ function waitForAudioLoad(audioEl) {
     });
 }
 
-
 /**
  * @param {Song} song 
  */
@@ -54,6 +53,7 @@ async function loadSongOntoPlayer(song) {
 
     // Wait for audio to load or error
     await waitForAudioLoad(audio);
+    if (videoFile) await waitForAudioLoad(video);
 
     currentsong = song;
     currentjson = song.getjson();
