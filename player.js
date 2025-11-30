@@ -22,11 +22,11 @@ function waitForAudioLoad(audioEl) {
             reject(new Error('Audio failed to load'));
         };
         const cleanup = () => {
-            audioEl.removeEventListener('loadedmetadata', onLoad);
+            audioEl.removeEventListener('canplay', onLoad);
             audioEl.removeEventListener('error', onError);
         };
 
-        audioEl.addEventListener('loadedmetadata', onLoad, { once: true });
+        audioEl.addEventListener('canplay', onLoad, { once: true });
         audioEl.addEventListener('error', onError, { once: true });
     });
 }
@@ -53,7 +53,6 @@ async function loadSongOntoPlayer(song) {
 
     // Wait for audio to load or error
     await waitForAudioLoad(audio);
-    if (videoFile) await waitForAudioLoad(video);
 
     currentsong = song;
     currentjson = song.getjson();
