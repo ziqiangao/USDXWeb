@@ -32,6 +32,10 @@ let e = setInterval(() => {
 let currentblockbase
 let currentblockp1
 let currentblockp2
+let currentlinebase
+let currentlinep1
+let currentlinep2
+
 function getcurrentlyrics(beat = -100) {
     if (!currentjson) return;
 
@@ -55,49 +59,51 @@ function getcurrentlyrics(beat = -100) {
         }
     }
 
-    showbars(!hideBars, !hideBars && isduet); // hide if finished
+    showbars(!hideBars, !hideBars && isduet);
 
     if (hideBars) {
-        // clear current block variables when hidden
-        currentblockbase = null;
-        currentblockp1 = null;
-        currentblockp2 = null;
-        return; // stop further highlighting
+        currentblockbase = currentblockp1 = currentblockp2 = null;
+        currentlinebase = currentlinep1 = currentlinep2 = null; // clear lines too
+        return;
     }
 
     if (isduet) {
-        // P1
+        // Player 1
         let idx = getlinebreakattime(beat, currentjson.lyrics.p1);
         let line = getline(idx, currentjson.lyrics.p1);
+        currentlinep1 = line[2];
         if (line[0] !== prevtext1) settext(line[0], line[1], 0, 1);
         prevtext1 = line[0];
         let highlight = getwordtime(beat, line[2]);
-        // set the current block variable to the highlighted lyric object (or null)
         currentblockp1 = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
         sethighlight(highlight[0], highlight[1], 0);
 
-        // P2
+        // Player 2
         idx = getlinebreakattime(beat, currentjson.lyrics.p2);
         line = getline(idx, currentjson.lyrics.p2);
+        currentlinep2 = line[2];
         if (line[0] !== prevtext2) settext(line[0], line[1], 1, 2);
         prevtext2 = line[0];
         highlight = getwordtime(beat, line[2]);
         currentblockp2 = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
         sethighlight(highlight[0], highlight[1], 1);
+
     } else {
         let idx = getlinebreakattime(beat, currentjson.lyrics.base);
         let line = getline(idx, currentjson.lyrics.base);
+        currentlinebase = line[2];
         if (line[0] !== prevtext1) settext(line[0], line[1], 0, 0);
         prevtext1 = line[0];
         let highlight = getwordtime(beat, line[2]);
         currentblockbase = (line[2] && line[2].length > 0 && line[2][highlight[0]]) ? line[2][highlight[0]] : null;
         sethighlight(highlight[0], highlight[1], 0);
 
-        // clear duet-specific block vars
-        currentblockp1 = null;
-        currentblockp2 = null;
+        currentblockp1 = currentblockp2 = null;
+        currentlinep1 = currentlinep2 = null;
     }
+
 }
+
 
 
 
