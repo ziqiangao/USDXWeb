@@ -40,6 +40,7 @@ function stoppreview() {
 
 async function commitplay(song) {
     if (songon) return
+    
     songon = true
     stoppreview()
     setTimeout(async () => {
@@ -47,10 +48,10 @@ async function commitplay(song) {
         cardcontainer.style.opacity = 0
         setcurtainopacity(0)
         setTimeout(() => {
-            sync(song.getmetadata().START || "0")
+            sync(medleymode ? medleystart - 8 : song.getmetadata().START || "0")
             showlyrics = true
             startplayer()
-            fadevolume(1, 100)
+            if (medleymode) fadevolume(1,7000); else fadevolume(1, 300)
         }, 500)
     }, 1000)
 }

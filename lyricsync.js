@@ -11,7 +11,7 @@ function loop() {
         requestAnimationFrame(loop)
         return
     }
-    if (audio.currentTime * 1000 > parseInt(currentsong?.getmetadata()?.END || "999999999")) finished()
+    if (audio.currentTime * 1000 > parseInt(currentsong?.getmetadata()?.END || "1000000000") || (audio.currentTime > medleyend && medleymode)) finished()
     if (currentjson) {
         bpm = parseFloat(currentjson.metadata["BPM"].replace(',', '.')) || 60
         beat = (audio.currentTime - currentjson.metadata["GAP"] / 1000) * (bpm * 4 / 60)

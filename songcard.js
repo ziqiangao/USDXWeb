@@ -1,5 +1,10 @@
-class Card {
+const discriptions = {
+    "Medley": "Medley Mode Is Avalible",
+    "Rap": "Song Contains Rap Lines",
+    "Duet": "Song Is A Duet",
+}
 
+class Card {
     #element
     #coverelement
     #infoelement
@@ -7,6 +12,7 @@ class Card {
     #iconcontainer
     #titleelement
     #artistelement
+    morebutton
 
     constructor() {
         // <div class="card">
@@ -41,6 +47,18 @@ class Card {
         this.#iconcontainer = document.createElement("div")
         this.#iconcontainer.classList.add("iconcontainer")
         this.#infoelement.appendChild(this.#iconcontainer)
+
+        // More Button
+        this.morebutton = document.createElement("button")
+        this.morebutton.classList.add("more")
+        this.morebutton.innerText = "⋮"
+        this.morebutton.setAttribute("type","button")
+        this.morebutton.setAttribute("disabled","true")
+        this.#infoelement.appendChild(this.morebutton)
+        this.morebutton.onclick = () => {
+            if (songon) return
+            menubox.showModal()
+        }
     }
 
     get element() { return this.#element }
@@ -50,6 +68,27 @@ class Card {
 
     get title() { return this.#titleelement.innerText }
     set title(v) { this.#titleelement.innerText = v }
+
+    get icons() {
+        const temp = []
+        for (const i of this.#iconcontainer.children) {
+            temp.push(i.src.slice(5).replace(".svg",""))
+        }
+    }
+
+    set icons(v) {
+        while (this.#iconcontainer.lastElementChild) {
+            this.#iconcontainer.removeChild(this.#iconcontainer.lastElementChild);
+        }
+
+        for (const i of v) {
+            const icon = document.createElement("img")
+            icon.title = discriptions[i]
+            icon.src = `Icons/${i}.svg`
+            icon.classList.add("icon")
+            this.#iconcontainer.appendChild(icon)
+        }
+    }
 
     get cover() {
         // returns the URL of the background image (without the url(...) wrapper)
@@ -61,7 +100,6 @@ class Card {
         // sets the background image of the cover element
         this.#coverelement.style.backgroundImage = `url("${v}")`;
     }
-
 }
 
 const cards = []

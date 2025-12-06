@@ -38,6 +38,7 @@ async function loadSongOntoPlayer(song) {
     let vidurl = "";
     let imgurl = "";
     let audurl = "";
+    currentsong = song;
 
     const audioFile = await song.getresource("audio");
     const videoFile = await song.getresource("video");
@@ -54,7 +55,7 @@ async function loadSongOntoPlayer(song) {
     // Wait for audio to load or error
     await waitForAudioLoad(audio);
 
-    currentsong = song;
+
     currentjson = song.getjson();
     isduet = song.isduet();
 }
@@ -63,14 +64,14 @@ async function loadSongOntoPlayer(song) {
 let t
 function sync(time) {
     clearTimeout(t)
-    const json = currentsong.getjson()
+    const json = currentsong?.getjson()
 
     audio.playbackRate = 1
     audio.currentTime = time
 
     if (video.src) {
         video.playbackRate = 1
-        let timeset = time + (json.metadata["VIDEOGAP"] ? parseFloat(json.metadata["VIDEOGAP"]) : 0)
+        let timeset = time + (json?.metadata["VIDEOGAP"] ? parseFloat(json?.metadata["VIDEOGAP"]) : 0)
         video.currentTime = timeset
         if (timeset < 0 && !audio.paused) {
             video.pause()
@@ -111,13 +112,13 @@ function startplayer() {
 }
 
 function getvolume() {
-    if (typeof gainnode !== "undefined") {return gainnode.gain.value}
+    if (typeof gainnode !== "undefined") { return gainnode.gain.value }
     return audio.volume
 }
 
 function setvolume(vol) {
-    if (typeof gainnode !== "undefined") {gainnode.gain.value = vol} else {audio.volume = vol}
-    
+    if (typeof gainnode !== "undefined") { gainnode.gain.value = vol } else { audio.volume = vol }
+
 }
 
 audio.onpause = () => {
@@ -136,5 +137,24 @@ document.addEventListener("visibilitychange", () => {
 });
 
 function finished() {
-    stopplay()
+    if (medleymode) {
+        applauseplayer.currentTime = 0
+        applauseplayer.play()
+    }
+    if (queue.length == 0 || !songon) { stopplay(); return }
+    stoppreview()
+    songon = false
+    setTimeout(() => {
+        if (medleymode) medley(queue.shift()); else commitplay(queue.shift())
+    }, 1100)
+}
+
+function getprogress() {
+    if (!songon) return 0
+    if (medleymode) {
+        return (audio.currentTime - medleystart) / (medleyend - medleystart)
+    }
+    if (songon) {
+        return (audio.currentTime - parseFloat(currentsong?.getmetadata().START || "0")) / (parseInt(currentsong?.getmetadata().END || audio.duration * 1000) / 1000 - parseFloat(currentsong?.getmetadata().START || "0"))
+    }
 }

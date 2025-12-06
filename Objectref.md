@@ -18,6 +18,7 @@ An Object for a loaded song
 - `active` - the song index where the song is selected
 - `currentsong` - the song object loaded into the player
 - `Songs` - a list of loaded songs
+- `SongwithMedley` - a list of songs which have a medley segment
 - `currentjson` - the json object of `currentsong`
 - `currentblockbase`, `currentblockp1`, `currentblockp2` - the currently highlighted word as an object
 - `currentlinebase`, `currentlinep1`, `currentlinep2` - the current line as an object

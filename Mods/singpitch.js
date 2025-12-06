@@ -49,7 +49,7 @@ function synthloop() {
 
                 const time = Tone.now();
                 const dur = currentsong.beattoseclength(temp1.duration);
-                const freq = 438 * Math.pow(2, (temp1.pitch - 9) / 12);
+                const freq = 435 * Math.pow(2, (temp1.pitch - 9) / 12);
                 synthp1.triggerAttackRelease(freq, dur, time);
 
             }
@@ -66,7 +66,7 @@ function synthloop() {
             } else {
                 const time = Tone.now();
                 const dur = currentsong.beattoseclength(temp2.duration);
-                const freq = 442 * Math.pow(2, (temp2.pitch - 9) / 12);
+                const freq = 445 * Math.pow(2, (temp2.pitch - 9) / 12);
                 synthp2.triggerAttackRelease(freq, dur, time);
 
 

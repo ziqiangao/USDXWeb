@@ -1,8 +1,13 @@
 function Getmedley(song, medleyMinDuration) {
     const metadata = song.getmetadata();
 
+    if (song.isduet()) {
+        //console.warn(`Medley not supported for duets in ${metadata.TITLE}`);
+        return null;
+    }
+
     if (metadata.MEDLEYSTARTBEAT && metadata.MEDLEYENDBEAT) {
-        console.info("Manual Medley");
+        //console.info("Manual Medley");
         return [parseInt(metadata.MEDLEYSTARTBEAT), parseInt(metadata.MEDLEYENDBEAT)];
     }
 
@@ -12,27 +17,17 @@ function Getmedley(song, medleyMinDuration) {
     if ((!baseLines || baseLines.length === 0) &&
         (!song.getAllLines("p1") || song.getAllLines("p1").length === 0) &&
         (!song.getAllLines("p2") || song.getAllLines("p2").length === 0)) {
-        console.warn(`Invalid lyrics in ${metadata.TITLE}`);
-        return null;
-    }
-
-    if (typeof metadata.MEDLEYSTART !== "undefined") {
-        console.log(`Medley already exists in ${metadata.TITLE}`);
-        return null;
-    }
-
-    if (song.isduet()) {
-        console.warn(`Medley not supported for duets in ${metadata.TITLE}`);
+        //console.warn(`Invalid lyrics in ${metadata.TITLE}`);
         return null;
     }
 
     if (metadata.RELATIVE === "yes") {
-        console.warn(`Relative timestamps are not supported for medleys in ${metadata.TITLE}`);
+        //console.warn(`Relative timestamps are not supported for medleys in ${metadata.TITLE}`);
         return null;
     }
 
     if (metadata.CALCMEDLEY === "off") {
-        console.info(`${metadata.TITLE} has disabled calculating medley`);
+        //console.info(`${metadata.TITLE} has disabled calculating medley`);
         return null;
     }
 
@@ -78,7 +73,7 @@ function Getmedley(song, medleyMinDuration) {
     }
 
     if (medleyCandidates.length === 0) {
-        console.warn(`No medley candidates found for ${metadata.TITLE}`);
+        //console.warn(`No medley candidates found for ${metadata.TITLE}`);
         return null;
     }
 
@@ -95,7 +90,7 @@ function Getmedley(song, medleyMinDuration) {
 
     const medleyLineCount = medleyEndLine - medleyStartLine + 1;
     if (medleyLineCount <= 3) {
-        console.warn(`No suitable medley section for ${metadata.TITLE}`);
+        //console.warn(`No suitable medley section for ${metadata.TITLE}`);
         return null;
     }
 
@@ -123,6 +118,5 @@ function Getmedley(song, medleyMinDuration) {
             }
         }
     }
-
     return medleyDuration >= medleyMinDuration ? [medleyStartBeat, medleyEndBeat] : null;
 }

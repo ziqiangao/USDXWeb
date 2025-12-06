@@ -2,6 +2,10 @@
     background-color: #000;
     transition: opacity 1s;
     z-index: 10000;
+    background-image: url('dot-grid-with-vinyl-bottom-right.jpg');
+    background-size: cover;
+    background-position:bottom right;
+    background-repeat: no-repeat;
 }
 
 #songselectoverlay {
@@ -84,7 +88,7 @@ body {
     padding: 0% 2%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 
 .iconcontainer {
@@ -93,15 +97,34 @@ body {
     padding: 0% 3%;
 }
 
+/* Dynamic text sizing */
 .title {
-    font-size: x-large;
+    font-size: clamp(1rem, 1.4vw, 6rem);
     font-weight: 700;
 }
 
 .artist {
+    font-size: clamp(0.6rem, 1.2vw, 4rem);
     color: #ddd;
     font-weight: 600;
 }
+
+/* Dynamic icon sizing */
+.iconcontainer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 94%;
+    height: clamp(12%, 4vw, 20%);  /* dynamic height */
+    padding: 0% 3%;
+}
+
+.icon {
+    aspect-ratio: 1;
+    height: clamp(0.5rem, 1.6vw, 3rem); /* dynamic icon size */
+    margin: 4% 1%;
+}
+
 
 .title, .artist {
     display: -webkit-box;       /* Required for line clamping */
@@ -121,14 +144,140 @@ body {
     transform: scale(0);
 }
 
-.iconcontainer {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
+.more {
+    position: absolute;
+    bottom: 2%;
+    top: auto;
+    height: clamp(0.5rem, 2vw, 3rem);
+    aspect-ratio: 1;
+    text-align: center;
+    font-size: clamp(0.6rem, 1.6vw, 4rem);
+    background-color: #0000;
+    padding: 0;
+    margin-left: 2%;
+    border: 0;
+    border-radius: 100%;
+    overflow: hidden;
 }
 
-.icon {
-    aspect-ratio: 1;
+.more:hover:enabled {
+    background-color: #0007;
+    cursor: pointer;
+}
+
+#menuoverlay {
+    pointer-events: none;
+    transition: background-color 0.5s;
+    background-color: #0000;
+}
+
+#menuoverlay:has(dialog:open) {
+    background-color: #0009;
+}
+
+dialog {
+    opacity: 0;
+    transition: transform 0.5s;
+    pointer-events: none; /* prevent clicks when hidden */
+    transform: translate(0px, -100dvh);
+}
+
+dialog[open] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#menuoverlay > dialog {
+    width: 80dvw;
+    height: 70dvh;
+    background-image: linear-gradient(30deg, #012, #024);
+    border-radius: 1.5vmin 1.5vmin;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.menuitem {
+    width: 98%;
+    height: 7%;
+    font-size: clamp(0.6rem, 2vmin, 4rem);
+    background-color: #0005;
+    border: 2px solid #fff;
+    margin: 2px;
+    border-radius: 1vmin;
+    transition: background-color 0.1s;
+}
+
+.close {
     height: 100%;
-    margin: 1% 3%;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    overflow: hidden;
+    padding: 0;
+    background-color: #0000;
+    border: 2px solid #fff;
+    transition: background-color 0.1s;
+}
+
+#closecontainer {
+    width: 99%;
+    height: 8%;
+}
+
+.close:focus, .close:hover, .menuitem:hover, .menuitem:focus {
+    outline: 0;
+    background-color: rgba(0, 255, 251, 0.5);
+}
+
+.menuitem:disabled {
+    color: #fff7;
+}
+
+#progressbarlayer {
+    display: flex;
+    align-items: flex-end;
+}
+
+#progressbar {
+    height: 1vmin;
+    width: 100%;
+    background-color: #fff;
+}
+
+#countdown {
+    font-size: 90vmin;
+    color: #6afc;
+    font-weight: 800;
+    transform-origin: center;
+    display: inline-block; /* required for transform scaling */
+}
+
+.stomp {
+    animation: stomp 0.5s ease forwards;
+}
+
+@keyframes stomp {
+    0% {
+        transform: scale(5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+#countdownoverlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stomp {
+    opacity: 0;
+    transform: scale(1);
 }

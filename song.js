@@ -95,7 +95,7 @@ class Song {
                 break
             }
             if (line.startsWith("P")) {
-                pswitch = parseInt(line[1])
+                pswitch = parseInt(line.replaceAll(" ","")[1])
                 continue
             }
             if (line.startsWith("#")) {
@@ -311,5 +311,31 @@ class Song {
      */
     beattoseclength(beat) {
         return (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
+    }
+
+    #lineisrap(line) {
+        if (line.length == 0) return false
+        let temp = true
+        for (const i of line) {
+            if (!"RG".includes(i.type)) temp = false
+        }
+        return temp
+    }
+
+    containsrap() {
+        let rap = false
+        let lines = this.getAllLinesAsObjects("base")
+        for (const i of lines) {
+            rap ||= this.#lineisrap(i)
+        }
+        lines = this.getAllLinesAsObjects("p1")
+        for (const i of lines) {
+            rap ||= this.#lineisrap(i)
+        }
+        lines = this.getAllLinesAsObjects("p2")
+        for (const i of lines) {
+            rap ||= this.#lineisrap(i)
+        }
+        return rap
     }
 }

@@ -41,7 +41,6 @@
         }
 
         #overlay {
-            z-index: 100;
             display: flex;
             flex-direction: column-reverse;
             align-items: center;
@@ -138,6 +137,7 @@
             opacity: 0;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <span id="debug">Debug</span>
     <div id="bgcontainer" class="fill">
         <img id="bgimage" class="asert" />
@@ -149,12 +149,30 @@
         <div id="topbar" class="lyric top hide">
         </div>
     </div>
+    <div id="progressbarlayer" class="fill">
+        <div id="progressbar"></div>
+    </div>
+    <div id="countdownoverlay" class="fill">
+        <span id="countdown"></span>
+    </div>
     <div id="curtain" class="fill"></div>
     <div id="songselectoverlay" class="fill">
-        
+    </div>
+    <div id="menuoverlay" class="fill">
+        <dialog>
+            <div id="closecontainer">
+                <button class="close" onclick="menubox.close()"><img src="Icons/Back.svg" alt="Back"></button>
+            </div>
+            <button class="menuitem" onclick="addtoqueue()">Add To Queue</button>
+            <button class="menuitem" onclick="startsong()">Start Song</button>
+            <button class="menuitem" onclick="startmedley()" id="medley">Start Medley</button>
+            <button class="menuitem" onclick="reloadcurrentsong()">Reload Song</button>
+            <button class="menuitem" onclick="start5medley()">Do 5 Medleys</button>
+            <button class="menuitem" onclick="start10medley()">Do 10 Medleys</button>
+        </dialog>
     </div>
     <audio id="audio" onended="finished()"></audio>
-    <audio id="nav" src="Nav.wav"></audio>
+    <audio id="nav" src="Effects/Nav.wav"></audio>
 
     <!-- Main Scripts -->
     <script src="song.js"></script>
@@ -163,14 +181,31 @@
     <script src="lyricsync.js"></script>
     <script src="volnurmalize.js"></script>
     <script src="main.js"></script>
+    <script src="queuemanager.js"></script>
+    <script src="medleymanager.js"></script>
     <script src="songselect.js"></script>
+    <script src="songmenu.js"></script>
     <script src="songcard.js"></script>
     <script src="medley.js"></script>
     <script src="preview.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="userfriendlymessages.js"></script>
+    <script>
+        progressbar = document.getElementById("progressbar")
+        function pgbar() {
+            progressbar.style.width = `${Math.max(getprogress() * 100,0)}%`
+            requestAnimationFrame(pgbar)
+        }
+        requestAnimationFrame(pgbar)
+    </script>
     
+
     <!-- Mods -->
-    <!--script src="http://unpkg.com/tone"></script-->
-    <!--script src="Mods/singpitch.js"></script-->
+    <!--
+    <script src="http://unpkg.com/tone"></script>
+    <script src="Mods/singpitch.js"></script>
+    -->
+    
 
 </body>
 

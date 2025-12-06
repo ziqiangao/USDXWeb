@@ -1,5 +1,6 @@
 const cardcontainer = document.getElementById("songselectoverlay")
 
+
 function setcurtainopacity(opacity = 1) {
     document.getElementById("curtain").style.opacity = opacity
 }
@@ -55,6 +56,15 @@ function mod(n, m) {
 
 const navAudio = document.getElementById("nav");
 
+function geticonsneeded(song) {
+    const icons = []
+    const metadata = song.getmetadata()
+    if (song.isduet()) icons.push("Duet")
+    if (song.containsrap()) icons.push("Rap")
+    if (SongwithMedley.includes(song)) icons.push("Medley")
+    return icons
+}
+
 function scrollright() {
     if (scrolling) return
     navAudio.play();
@@ -75,11 +85,20 @@ function scrollright() {
         snapback();
         cardcontainer.appendChild(cardcontainer.firstElementChild);
 
+        for (const i in cards) {
+            if (i == c) {
+                cards[i].morebutton.removeAttribute("disabled")
+            } else {
+                cards[i].morebutton.setAttribute("disabled", "true")
+            }
+        }
+
         const card = cards[mod(c + 3, 7)];
         const song = Songs[mod(active + 3, Songs.length)];
 
         card.artist = song.getmetadata().ARTIST;
         card.title = song.getmetadata().TITLE;
+        card.icons = geticonsneeded(song)
         URL.revokeObjectURL(card.cover);
         card.cover = URL.createObjectURL(await song.getresource("cover"));
 
@@ -107,11 +126,20 @@ function scrollleft() {
         snapback();
         cardcontainer.insertBefore(cardcontainer.lastElementChild, cardcontainer.firstElementChild);
 
+        for (const i in cards) {
+            if (i == c) {
+                cards[i].morebutton.removeAttribute("disabled")
+            } else {
+                cards[i].morebutton.setAttribute("disabled", "true")
+            }
+        }
+
         const card = cards[mod(c - 3, 7)];
         const song = Songs[mod(active - 3, Songs.length)];
 
         card.artist = song.getmetadata().ARTIST;
         card.title = song.getmetadata().TITLE;
+        card.icons = geticonsneeded(song)
         URL.revokeObjectURL(card.cover);
         card.cover = URL.createObjectURL(await song.getresource("cover"));
 
@@ -143,7 +171,16 @@ async function loadsongsontocards(activeindex) {
         cardsdisplay[i].cover = blob
         cardsdisplay[i].title = metadata.TITLE
         cardsdisplay[i].artist = metadata.ARTIST
+        cardsdisplay[i].icons = geticonsneeded(displaysongs[i])
         blobs.push(blob)
+    }
+
+    for (const i in cards) {
+        if (i == 3) {
+            cards[i].morebutton.removeAttribute("disabled")
+        } else {
+            cards[i].morebutton.setAttribute("disabled", "true")
+        }
     }
 }
 
@@ -152,9 +189,9 @@ let previewon = false
 
 function handlepreview() {
     clearTimeout(timer)
-    if (previewon) { stoppreview(), previewon = false}
+    if (previewon) { stoppreview(), previewon = false }
     timer = setTimeout(() => {
         startpreview(Songs[active])
         previewon = true
-    },2000)
+    }, 2000)
 }
