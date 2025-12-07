@@ -1,11 +1,26 @@
 let created = false
+/**
+ * @type {AudioNode}
+ */
 let gainnode
+/**
+ * @type {AudioNode}
+ */
+let audioprocessinput
+/**
+ * @type {AudioContext}
+ */
 let ctx
+/**
+ * @type {() => void}
+ */
+let audioready
 function volnormanize() {
     if (!created) {
         ctx = new AudioContext()
         const media = ctx.createMediaElementSource(audio)
         const gain = ctx.createGain()
+        audioprocessinput = gain
 
         media.connect(gain)
         gain.gain.value = 15
@@ -31,5 +46,7 @@ function volnormanize() {
             }
         })
         created = true
+
+        if (audioready) audioready()
     }
 }

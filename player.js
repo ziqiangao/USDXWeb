@@ -49,7 +49,9 @@ async function loadSongOntoPlayer(song) {
     if (imageFile) imgurl = URL.createObjectURL(imageFile);
 
     audio.src = audurl;
+    audio.load(); 
     video.src = vidurl;
+    video.load(); 
     image.src = imgurl;
 
     // Wait for audio to load or error

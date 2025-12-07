@@ -24,6 +24,7 @@ An Object for a loaded song
 - `currentlinebase`, `currentlinep1`, `currentlinep2` - the current line as an object
 - `songon` - weather a song is currently playing
 - `previewon` - weather the preview is playing
+- `audioprocessinput` - an audionode for later audio processing
 
 # Functions
 - `Getmedley(Song)` - returns the medley segment
@@ -32,3 +33,4 @@ An Object for a loaded song
 
 # Callbacks
 - `finished` - called when the song has ended, regardless of weather in preview or play mode
+- `audioready` - called when the audio context is created

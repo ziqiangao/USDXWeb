@@ -51,7 +51,7 @@ async function commitplay(song) {
             sync(medleymode ? medleystart - 8 : song.getmetadata().START || "0")
             showlyrics = true
             startplayer()
-            if (medleymode) fadevolume(1,7000); else fadevolume(1, 300)
+            if (medleymode) fadevolume(1,5000); else fadevolume(1, 300)
         }, 500)
     }, 1000)
 }
