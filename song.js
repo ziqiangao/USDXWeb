@@ -141,7 +141,7 @@ class Song {
                     this.#instrumental = await this.#folder.getFileHandle(value)
                 }
             } catch {
-                console.warn(`File ${value} could not be loaded, "${this.#parsedjson.metadata.TITLE}"`)
+                console.log(`File ${value} could not be loaded, "${this.#parsedjson.metadata.TITLE}"`)
             }
         }
     }
