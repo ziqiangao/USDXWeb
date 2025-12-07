@@ -58,6 +58,7 @@ async function commitplay(song) {
 
 function stopplay() {
     songon = false
+    medleymode = false
     stoppreview()
     cardcontainer.style.opacity = 1
 }

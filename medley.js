@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {Song} song 
+ * @param {number} medleyMinDuration 
+ * @returns {[number,number]?}
+ */
 function Getmedley(song, medleyMinDuration) {
     const metadata = song.getmetadata();
 
