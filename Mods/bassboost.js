@@ -7,18 +7,25 @@ audioready = () => {
     audioprocessinput.disconnect()
     audioprocessinput.connect(DCRemove)
 
+
+
     const HP = ctx.createBiquadFilter()
     const LP = ctx.createBiquadFilter()
+
+    DCRemove.connect(LP)
+    DCRemove.connect(HP)
     LP.frequency.value = CUTOFF
     HP.frequency.value = CUTOFF
     LP.Q.value = Math.SQRT1_2
     HP.Q.value = Math.SQRT1_2
     HP.type = "highpass"
 
-    DCRemove.connect(HP)
-    DCRemove.connect(LP)
+
     const HPPreGain = ctx.createGain()
     const LPPreGain = ctx.createGain()
+
+    LP.connect(LPPreGain)
+    HP.connect(HPPreGain)
 
     LPPreGain.gain.value = 5
     HPPreGain.gain.value = 3
