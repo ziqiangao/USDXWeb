@@ -1,4 +1,4 @@
-const CUTOFF = 80
+const CUTOFF = 120
 audioready = () => {
     const DCRemove = ctx.createBiquadFilter()
     DCRemove.Q.value = Math.SQRT1_2
@@ -33,8 +33,8 @@ audioready = () => {
     const HPCompressor = ctx.createDynamicsCompressor()
     const LPCompressor = ctx.createDynamicsCompressor()
 
-    LPCompressor.attack.value = 0.01
-    HPCompressor.attack.value = 0.01
+    LPCompressor.attack.value = 0.0
+    HPCompressor.attack.value = 0.0
 
     LPCompressor.release.value = 1
     HPCompressor.release.value = 1
@@ -45,20 +45,25 @@ audioready = () => {
     LPCompressor.ratio.value = 4
     HPCompressor.ratio.value = 4
 
-    LPCompressor.threshold.value = -24
-    HPCompressor.threshold.value = -24
+    LPCompressor.threshold.value = -28
+    HPCompressor.threshold.value = -28
 
     LPPreGain.connect(LPCompressor)
     HPPreGain.connect(HPCompressor)
 
     const LPPostGain = ctx.createGain()
-    LPPostGain.gain.value = 0.9
+    LPPostGain.gain.value = 1.0
     const HPPostGain = ctx.createGain()
     HPPostGain.gain.value = 0.7
 
     HPCompressor.connect(HPPostGain)
     LPCompressor.connect(LPPostGain)
 
-    HPPostGain.connect(gainnode)
-    LPPostGain.connect(gainnode)
+    const infragain = ctx.createGain()
+    infragain.gain.value = 1 / 2
+
+    HPPostGain.connect(infragain)
+    LPPostGain.connect(infragain)
+
+    infragain.connect(gainnode)
 }

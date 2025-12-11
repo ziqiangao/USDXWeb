@@ -5,6 +5,8 @@ let songon = false
  * @param {Song} song 
  */
 async function startpreview(song) {
+    if (transition) return
+    transition = true
 
     const med = Getmedley(song, 0)
     await loadSongOntoPlayer(song)
@@ -28,14 +30,17 @@ async function startpreview(song) {
         setcurtainopacity(.5)
         startplayer()
         fadevolume(.5)
+        transition = false
     }, 200)
 }
 
 function stoppreview() {
+    if (transition) return
+    transition = true
     showlyrics = false
     setcurtainopacity(1)
     fadevolume(0)
-    setTimeout(pauseplayer, 1000)
+    setTimeout(() => {pauseplayer(); transition = false}, 1000)
 }
 
 async function commitplay(song) {

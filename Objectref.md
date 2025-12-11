@@ -25,6 +25,8 @@ An Object for a loaded song
 - `songon` - weather a song is currently playing
 - `previewon` - weather the preview is playing
 - `audioprocessinput` - an audionode for later audio processing
+- `queue` - the current song queue, first item is the next one in the line
+- `medleymode` - wheather medley mode is enabled
 
 # Functions
 - `Getmedley(Song)` - returns the medley segment

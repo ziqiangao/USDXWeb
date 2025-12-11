@@ -19,7 +19,7 @@ function waitForAudioLoad(audioEl) {
         };
         const onError = () => {
             cleanup();
-            reject(new Error('Audio failed to load'));
+            reject(console.error("Audio Failed To Load"));
         };
         const cleanup = () => {
             audioEl.removeEventListener('canplay', onLoad);
@@ -49,14 +49,14 @@ async function loadSongOntoPlayer(song) {
     if (imageFile) imgurl = URL.createObjectURL(imageFile);
 
     audio.src = audurl;
-    audio.load(); 
+    audio.load();
     video.src = vidurl;
-    video.load(); 
+    video.load();
     image.src = imgurl;
 
     // Wait for audio to load or error
     await waitForAudioLoad(audio);
-
+    transition = false
 
     currentjson = song.getjson();
     isduet = song.isduet();
@@ -138,16 +138,19 @@ document.addEventListener("visibilitychange", () => {
     }
 });
 
+let transition = false
 function finished() {
+    if (transition) return
     if (medleymode) {
         applauseplayer.currentTime = 0
         applauseplayer.play()
     }
-    if (queue.length == 0 || !songon) { stopplay(); return }
+    if (queue.length == 0 || !songon) { stopplay(); transition = false; return }
     stoppreview()
     songon = false
     setTimeout(() => {
         if (medleymode) medley(queue.shift()); else commitplay(queue.shift())
+
     }, 1100)
 }
 

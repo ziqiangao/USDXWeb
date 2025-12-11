@@ -86,7 +86,7 @@ class Song {
             }
         }
 
-
+        if (this.#text) {Songs.push(this)} else {return}
         let lines = this.#text.split(/\r?\n/)
 
         let pswitch = 0
@@ -177,7 +177,6 @@ class Song {
     }
 
     getjson() {
-        if (!this.#parsedjson) throw "JSON Not Loaded"
         return this.#parsedjson
     }
 

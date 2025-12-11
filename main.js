@@ -7,33 +7,46 @@ let FoldersUsed = []
 let Songs = []
 let SongwithMedley = []
 document.addEventListener("contextmenu", async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    volnormanize()
-    Folder = await showDirectoryPicker({ id: "ultrastar" })
+    volnormanize();
+    Folder = await showDirectoryPicker({ id: "ultrastar" });
 
-    // Check if this folder was already used
     for (const used of FoldersUsed) {
-        if (await used.isSameEntry(Folder)) {
-            return; // same folder → ignore
-        }
+        if (await used.isSameEntry(Folder)) return;
     }
 
-    FoldersUsed.push(Folder)
-    for await (const folder of Folder.entries()) {
-        //console.log(folder)
-        if (folder[1] instanceof FileSystemDirectoryHandle) {
-            let song = new Song(folder[1])
-            Songs.push(song)
-            await song.parse()
-            await song.storefilepointers()
-            if (Getmedley(song,15)) {
-                SongwithMedley.push(song)
+    FoldersUsed.push(Folder);
+
+    await scanFolder(Folder, 0, 4);
+
+    if (Songs.length > 0) loadsongsontocards(0);
+});
+
+
+async function scanFolder(dirHandle, depth = 0, maxDepth = 4) {
+    if (depth > maxDepth) return;
+
+    for await (const entry of dirHandle.entries()) {
+        const [name, handle] = entry;
+
+        if (handle instanceof FileSystemDirectoryHandle) {
+            // process folder as a song folder
+            let song = new Song(handle);
+            await song.parse();
+            if (!song.getjson()) continue;
+
+            await song.storefilepointers();
+            if (Getmedley(song, 15)) {
+                SongwithMedley.push(song);
             }
+
+            // recurse
+            await scanFolder(handle, depth + 1, maxDepth);
         }
     }
-    loadsongsontocards(0)
-})
+}
+
 
 
 document.addEventListener("keydown", (event) => {
@@ -57,9 +70,8 @@ document.addEventListener("keydown", (event) => {
         case "enter":
             if (songon) return
             medleymode = false
-            menubox.close()
             clearTimeout(timer)
-            commitplay(Songs[active])
+            startsong()
             break
         case "backspace":
             if (!songon) return
