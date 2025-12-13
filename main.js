@@ -9,10 +9,13 @@ let SongwithMedley = []
 
 document.addEventListener("click", () => {
     if (scene == 'main') {
+        whoosh.currentTime = 0
+        whoosh.play()
         audio.play()
+        fadevolume(1, 300)
     }
     volnormanize();
-},{once: true})
+}, { once: true })
 
 document.addEventListener("contextmenu", async (event) => {
     event.preventDefault();
@@ -58,7 +61,7 @@ async function scanFolder(dirHandle, depth = 0, maxDepth = 4) {
 
 
 document.addEventListener("keydown", (event) => {
-    
+
 
     if (menubox.open) {
         if (event.key.toLowerCase() == "m") menubox.close()

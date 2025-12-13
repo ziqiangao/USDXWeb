@@ -34,13 +34,13 @@ async function startpreview(song) {
     }, 200)
 }
 
-function stoppreview() {
+function stoppreview(time = 1000) {
     if (transition) return
     transition = true
     showlyrics = false
     setcurtainopacity(1)
-    fadevolume(0)
-    setTimeout(() => {pauseplayer(); transition = false}, 1000)
+    fadevolume(0,time)
+    setTimeout(() => {pauseplayer(); transition = false}, time)
 }
 
 async function commitplay(song) {

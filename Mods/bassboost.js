@@ -52,7 +52,7 @@ audioready = () => {
     const LPPostGain = ctx.createGain()
     LPPostGain.gain.value = 1.0
     const HPPostGain = ctx.createGain()
-    HPPostGain.gain.value = 0.8
+    HPPostGain.gain.value = 0.7
 
     HPCompressor.connect(HPPostGain)
     LPCompressor.connect(LPPostGain)
