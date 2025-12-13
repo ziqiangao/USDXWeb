@@ -1,15 +1,13 @@
 #curtain {
     background-color: #000;
     transition: opacity 1s;
-    z-index: 10000;
     background-image: url('dot-grid-with-vinyl-bottom-right.jpg');
     background-size: cover;
-    background-position:bottom right;
+    background-position: bottom right;
     background-repeat: no-repeat;
 }
 
 #songselectoverlay {
-    z-index: 1000000;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -36,7 +34,6 @@ body {
     transition-property: transform, opacity;
     transition-duration: 0.1s;
     margin: 1vmin;
-    z-index: 1000;
 }
 
 .cover {
@@ -44,10 +41,8 @@ body {
     border-radius: 1.5vmin 1.5vmin;
     width: 100%;
     aspect-ratio: 1;
-    z-index: 1;
     transition-property: border-radius;
     transition-duration: 0.1s;
-
     background-image: url("[main]songCover.png");
     background-size: cover;
     /* fill the box */
@@ -68,6 +63,7 @@ body {
     transition-duration: 0.3s;
     display: flex;
     flex-direction: column;
+    z-index: -1;
 }
 
 .card.active {
@@ -115,24 +111,32 @@ body {
     align-items: flex-end;
     justify-content: flex-end;
     width: 94%;
-    height: clamp(12%, 4vw, 20%);  /* dynamic height */
+    height: clamp(12%, 4vw, 20%);
+    /* dynamic height */
     padding: 0% 3%;
 }
 
 .icon {
     aspect-ratio: 1;
-    height: clamp(0.5rem, 1.6vw, 3rem); /* dynamic icon size */
+    height: clamp(0.5rem, 1.6vw, 3rem);
+    /* dynamic icon size */
     margin: 4% 1%;
 }
 
 
-.title, .artist {
-    display: -webkit-box;       /* Required for line clamping */
-    -webkit-box-orient: vertical; /* Required for line clamping */
+.title,
+.artist {
+    display: -webkit-box;
+    /* Required for line clamping */
+    -webkit-box-orient: vertical;
+    /* Required for line clamping */
     line-clamp: 2;
-    -webkit-line-clamp: 2;      /* Number of lines to show */
-    overflow: hidden;            /* Hide the rest */
-    text-overflow: ellipsis;     /* Add the ellipsis */
+    -webkit-line-clamp: 2;
+    /* Number of lines to show */
+    overflow: hidden;
+    /* Hide the rest */
+    text-overflow: ellipsis;
+    /* Add the ellipsis */
 }
 
 .edge {
@@ -178,7 +182,8 @@ body {
 dialog {
     opacity: 0;
     transition: transform 0.5s;
-    pointer-events: none; /* prevent clicks when hidden */
+    pointer-events: none;
+    /* prevent clicks when hidden */
     transform: translate(0px, -100dvh);
 }
 
@@ -187,7 +192,7 @@ dialog[open] {
     pointer-events: auto;
 }
 
-#menuoverlay > dialog {
+#menuoverlay>dialog {
     width: 80dvw;
     height: 70dvh;
     background-image: linear-gradient(30deg, #012, #024);
@@ -224,9 +229,13 @@ dialog[open] {
     height: 8%;
 }
 
-.close:focus, .close:hover, .menuitem:hover, .menuitem:focus {
+.close:focus,
+.close:hover,
+.menuitem:hover,
+.menuitem:focus {
     outline: 0;
     background-color: rgba(0, 255, 251, 0.5);
+    
 }
 
 .menuitem:disabled {
@@ -249,7 +258,8 @@ dialog[open] {
     color: #6afc;
     font-weight: 800;
     transform-origin: center;
-    display: inline-block; /* required for transform scaling */
+    display: inline-block;
+    /* required for transform scaling */
 }
 
 .stomp {
@@ -261,10 +271,12 @@ dialog[open] {
         transform: scale(5);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.2);
         opacity: 1;
     }
+
     100% {
         transform: scale(1);
     }
@@ -280,4 +292,9 @@ dialog[open] {
 .stomp {
     opacity: 0;
     transform: scale(1);
+}
+
+.hide {
+    opacity: 0;
+    pointer-events: none;
 }

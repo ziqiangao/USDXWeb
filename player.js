@@ -40,27 +40,36 @@ async function loadSongOntoPlayer(song) {
     let audurl = "";
     currentsong = song;
 
-    const audioFile = await song.getresource("audio");
-    const videoFile = await song.getresource("video");
-    const imageFile = await song.getresource("background");
+    const [audioFile, videoFile, imageFile] = await Promise.all([
+        song.getresource("audio"),
+        song.getresource("video"),
+        song.getresource("background")
+    ]);
 
     if (audioFile) audurl = URL.createObjectURL(audioFile);
     if (videoFile) vidurl = URL.createObjectURL(videoFile);
     if (imageFile) imgurl = URL.createObjectURL(imageFile);
 
     audio.src = audurl;
-    audio.load();
     video.src = vidurl;
-    video.load();
     image.src = imgurl;
 
-    // Wait for audio to load or error
-    await waitForAudioLoad(audio);
-    transition = false
+    // Load media
+    audio.load();
+    video.load();
 
+    // Wait for both to be ready (or skip if not present)
+    const mediaPromises = [];
+    mediaPromises.push(waitForAudioLoad(audio));
+    if (vidurl) mediaPromises.push(waitForAudioLoad(video));
+
+    await Promise.all(mediaPromises);
+
+    transition = false;
     currentjson = song.getjson();
     isduet = song.isduet();
 }
+
 
 
 let t

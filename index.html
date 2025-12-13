@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" , viewport-fit=cover">
     <link rel="stylesheet" href="ui.css">
-    <title>Document</title>
+    <title>Ultrastar Web</title>
 </head>
 
 <body>
@@ -132,12 +132,9 @@
             z-index: 10000000000000;
             background-color: #0008;
         }
-
-        .hide {
-            opacity: 0;
-        }
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="mainmenu.css">
     <span id="debug" class="hide">Debug</span>
     <div id="bgcontainer" class="fill">
         <img id="bgimage" class="asert" />
@@ -157,6 +154,10 @@
     </div>
     <div id="curtain" class="fill"></div>
     <div id="songselectoverlay" class="fill">
+        
+    </div>
+    <div class="fill">
+        <button class="back" onclick="back()"><img src="Icons/Back.svg" alt="Back"></button>
     </div>
     <div id="menuoverlay" class="fill">
         <dialog>
@@ -171,8 +172,19 @@
             <button class="menuitem" onclick="start10medley()">Do 10 Medleys</button>
         </dialog>
     </div>
-    <audio id="audio" onended="finished()"></audio>
+    <audio id="audio" onended="finished()" src="Effects/Amazing Future.mp3"></audio>
     <audio id="nav" src="Effects/Nav.wav"></audio>
+    <div class="fill" id="mainmenu">
+        <div class="menudiv" id="logocontainer">
+            <img src="UltraStarPlayLogo_2023_02.svg" id="logo" alt="Logo">
+        </div>
+        <div class="menudiv" id="menubuttons">
+            <button class="menubutton" onclick="hidemainmenu()">Sing!</button>
+            <button class="menubutton">Options</button>
+        </div>
+        <div class="menudiv" id="additonalbuttons"></div>
+    </div>
+    <div class="fill hide" id="configmenu"></div>
 
     <!-- Main Scripts -->
     <script src="song.js"></script>
@@ -190,23 +202,24 @@
     <script src="preview.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="userfriendlymessages.js"></script>
+    <script src="menu.js"></script>
     <script>
         progressbar = document.getElementById("progressbar")
         function pgbar() {
-            progressbar.style.width = `${Math.max(getprogress() * 100,0)}%`
+            progressbar.style.width = `${Math.max(getprogress() * 100, 0)}%`
             requestAnimationFrame(pgbar)
         }
         requestAnimationFrame(pgbar)
     </script>
-    
+
 
     <!-- Mods -->
     <!--
         <script src="Mods/enhancechorus.js"></script>
         <script src="http://unpkg.com/tone"></script>
         <script src="Mods/singpitch.js"></script>
+        <script src="Mods/bassboost.js"></script>
     -->
-    <script src="Mods/bassboost.js"></script>
 
 </body>
 

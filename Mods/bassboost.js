@@ -7,8 +7,6 @@ audioready = () => {
     audioprocessinput.disconnect()
     audioprocessinput.connect(DCRemove)
 
-
-
     const HP = ctx.createBiquadFilter()
     const LP = ctx.createBiquadFilter()
 
@@ -54,7 +52,7 @@ audioready = () => {
     const LPPostGain = ctx.createGain()
     LPPostGain.gain.value = 1.0
     const HPPostGain = ctx.createGain()
-    HPPostGain.gain.value = 0.7
+    HPPostGain.gain.value = 0.8
 
     HPCompressor.connect(HPPostGain)
     LPCompressor.connect(LPPostGain)

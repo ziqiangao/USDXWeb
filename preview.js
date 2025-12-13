@@ -52,6 +52,7 @@ async function commitplay(song) {
         await loadSongOntoPlayer(song)
         cardcontainer.style.opacity = 0
         setcurtainopacity(0)
+        scene = "play"
         setTimeout(() => {
             sync(medleymode ? medleystart - 8 : song.getmetadata().START || "0")
             showlyrics = true
@@ -66,4 +67,5 @@ function stopplay() {
     medleymode = false
     stoppreview()
     cardcontainer.style.opacity = 1
+    scene = "songs"
 }

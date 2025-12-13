@@ -6,6 +6,14 @@ let FoldersUsed = []
  */
 let Songs = []
 let SongwithMedley = []
+
+document.addEventListener("click", () => {
+    if (scene == 'main') {
+        audio.play()
+    }
+    volnormanize();
+},{once: true})
+
 document.addEventListener("contextmenu", async (event) => {
     event.preventDefault();
 
@@ -50,7 +58,7 @@ async function scanFolder(dirHandle, depth = 0, maxDepth = 4) {
 
 
 document.addEventListener("keydown", (event) => {
-    if (!Songs.length) return
+    
 
     if (menubox.open) {
         if (event.key.toLowerCase() == "m") menubox.close()
@@ -58,32 +66,34 @@ document.addEventListener("keydown", (event) => {
     }
     switch (event.key.toLowerCase()) {
         case "arrowleft":
-            if (songon) return
+            if (!Songs.length) return
+            if (scene !== 'songs') return
             clearTimeout(timer)
             scrollleft();
             break;
         case "arrowright":
-            if (songon) return
+            if (!Songs.length) return
+            if (scene !== 'songs') return
             clearTimeout(timer)
             scrollright();
             break;
         case "enter":
-            if (songon) return
+            if (!Songs.length) return
+            if (scene !== 'songs') return
             medleymode = false
             clearTimeout(timer)
             startsong()
             break
         case "backspace":
-            if (!songon) return
-            queue.length = 0;
-            stopplay()
+            back()
             break
         case "m":
-            if (songon) return
+            if (!Songs.length) return
+            if (scene !== 'songs') return
             clearTimeout(timer)
             menubox.showModal()
         case " ":
-            if (!songon) return
+            if (scene !== 'play') return
             if (!audio.paused) pauseplayer(); else startplayer()
             break
     }
