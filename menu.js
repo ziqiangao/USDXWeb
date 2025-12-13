@@ -15,7 +15,7 @@ function showmainmenu() {
     document.getElementById("mainmenu").classList.remove("hide")
     scene = "main"
     audio.src = "Effects/Amazing Future.mp3"
-    fadevolume(1,300)
+    fadevolume(0.6,300)
     audio.play()
     audio.loop = true
     whoosh.currentTime = 0
