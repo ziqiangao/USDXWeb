@@ -20,6 +20,13 @@ function back() {
         stopplay()
         return
     }
-    if (previewon) stoppreview()
-    showmainmenu()
+    if (previewon) {
+        stoppreview()
+        setTimeout(() => {
+            showmainmenu()
+        },1000)
+    } else {
+        showmainmenu()
+    }
+    
 }
