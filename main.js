@@ -12,7 +12,7 @@ document.addEventListener("click", () => {
         whoosh.currentTime = 0
         whoosh.play()
         audio.play()
-        fadevolume(1, 300)
+        fadevolume(0.6, 300)
     }
     volnormanize();
 }, { once: true })
