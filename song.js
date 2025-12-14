@@ -63,18 +63,14 @@ class Song {
 
     /**@param {String} line  */
     #splitlyricline(line) {
-        let tmp2 = line.split(" ", 4)
-        let i = line.charAt(line.length - 1) == " " ? line.length - 2 : line.length - 1
-        while (line.charAt(i) != " ") {
-            i--
-        }
-        while (line.charAt(i) == " ") {
-            i--
-        }
-        i += 2
-        tmp2.push(line.slice(i))
-        return tmp2
+        const parts = line.split(" ");
+        const tmp2 = parts.slice(0, 4); // first four fields
+        // everything else, preserving spaces
+        const remainderIndex = tmp2.reduce((acc, val) => acc + val.length + 1, 0);
+        tmp2.push(line.slice(remainderIndex));
+        return tmp2;
     }
+
 
     async parse() {
         this.#parsedjson = { metadata: {}, lyrics: { base: [], p1: [], p2: [] } };
@@ -86,7 +82,7 @@ class Song {
             }
         }
 
-        if (this.#text) {Songs.push(this)} else {return}
+        if (this.#text) { Songs.push(this) } else { return }
         let lines = this.#text.split(/\r?\n/)
 
         let pswitch = 0
@@ -95,7 +91,7 @@ class Song {
                 break
             }
             if (line.startsWith("P")) {
-                pswitch = parseInt(line.replaceAll(" ","")[1])
+                pswitch = parseInt(line.replaceAll(" ", "")[1])
                 continue
             }
             if (line.startsWith("#")) {
@@ -300,7 +296,7 @@ class Song {
      * @returns {number}
      */
     beattoseconds(beat) {
-        return (this.#parsedjson.metadata.GAP / 1000) + (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
+        return (this.#parsedjson.metadata.GAP / 1000) + (beat * 60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",", ".")) * 4)
     }
 
     /**
@@ -309,7 +305,7 @@ class Song {
      * @returns {number}
      */
     beattoseclength(beat) {
-        return (beat*60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",",".")) * 4)
+        return (beat * 60) / (parseFloat(this.#parsedjson.metadata.BPM.replace(",", ".")) * 4)
     }
 
     #lineisrap(line) {
