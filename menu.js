@@ -37,7 +37,7 @@ function back() {
         stoppreview(200)
         setTimeout(() => {
             showmainmenu()
-        },300)
+        },400)
     } else {
         showmainmenu()
     }

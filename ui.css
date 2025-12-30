@@ -1,6 +1,6 @@
 #curtain {
     background-color: #000;
-    transition: opacity 1s;
+    transition: opacity 0.3s;
     background-image: url('dot-grid-with-vinyl-bottom-right.jpg');
     background-size: cover;
     background-position: bottom right;
@@ -13,7 +13,7 @@
     justify-content: space-around;
     align-items: center;
     margin: 0;
-    transition: opacity 1s, transform 0.1s;
+    transition: opacity 0.5s, transform 0.1s;
 }
 
 * {

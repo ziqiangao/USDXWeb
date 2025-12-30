@@ -101,3 +101,13 @@ document.addEventListener("keydown", (event) => {
             break
     }
 });
+
+document.addEventListener("keyup",(event) => {
+    switch (event.key.toLowerCase()) {
+        case "arrowleft":
+        case "arrowright":
+            if (!Songs.length) return
+            if (scene !== 'songs') return
+            handlepreview()
+    }
+})

@@ -68,7 +68,6 @@ function geticonsneeded(song) {
 function scrollright() {
     if (scrolling) return
     navAudio.play();
-    handlepreview()
     navAudio.currentTime = 0;
     scrolling = true
     cardcontainer.style.transform = "translate(-14.3dvw,0dvw)"
@@ -108,7 +107,6 @@ function scrollright() {
 
 function scrollleft() {
     if (scrolling) return
-    handlepreview()
     navAudio.play();
     navAudio.currentTime = 0;
     scrolling = true
@@ -193,5 +191,5 @@ function handlepreview() {
     timer = setTimeout(() => {
         startpreview(Songs[active])
         previewon = true
-    }, 2000)
+    }, 600)
 }

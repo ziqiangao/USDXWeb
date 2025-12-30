@@ -114,12 +114,14 @@ function pauseplayer() {
     audio.pause()
 }
 
-function startplayer() {
+async function startplayer() {
     set()
     if (!document.fullscreenElement) document.documentElement.requestFullscreen()
     sync(audio.currentTime)
-    if (currentsong.getmetadata().VIDEO) video.play()
-    audio.play()
+    promises = []
+    if (currentsong.getmetadata().VIDEO) promises.push(video.play())
+    promises.push(audio.play())
+    await Promise.all(promises)
 }
 
 function getvolume() {

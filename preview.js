@@ -24,42 +24,52 @@ async function startpreview(song) {
             sync(parseFloat(start) + totaldur / 4 - 1)
         }
     }
-    setTimeout(() => {
+    setTimeout(async () => {
         showlyrics = false
         setvolume(0)
-        setcurtainopacity(.5)
-        startplayer()
-        fadevolume(.5)
-        transition = false
-    }, 200)
+        startplayer().then(v => {
+            setcurtainopacity(.5)
+            fadevolume(.5, 0.2)
+            transition = false
+        }).catch(v => {
+            transition = false
+            console.error("Player failed :(")
+        })
+    }, 500)
 }
 
-function stoppreview(time = 1000) {
+function stoppreview(time = 200) {
     if (transition) return
     transition = true
     showlyrics = false
     setcurtainopacity(1)
-    fadevolume(0,time)
-    setTimeout(() => {pauseplayer(); transition = false}, time)
+    fadevolume(0, time)
+    setTimeout(() => { pauseplayer(); transition = false }, time)
 }
 
 async function commitplay(song) {
     if (songon) return
-    
     songon = true
     stoppreview()
     setTimeout(async () => {
         await loadSongOntoPlayer(song)
+        sync(medleymode ? medleystart - 8 : song.getmetadata().START || "0")
         cardcontainer.style.opacity = 0
-        setcurtainopacity(0)
-        scene = "play"
         setTimeout(() => {
-            sync(medleymode ? medleystart - 8 : song.getmetadata().START || "0")
             showlyrics = true
-            startplayer()
-            if (medleymode) fadevolume(1,5000); else fadevolume(1, 300)
+            startplayer().then(v => {
+                fadevolume(1,500)
+                setcurtainopacity(0)
+                scene = "play"
+                running()
+                if (medleymode) fadevolume(1, 5000); else fadevolume(1, 300)
+            }).catch(v => {
+                console.error("Player failed :(")
+                songon = false
+                failed()  
+            })
         }, 500)
-    }, 1000)
+    }, 700)
 }
 
 function stopplay() {

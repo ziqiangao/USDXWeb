@@ -27,7 +27,14 @@ async function medley(song) {
     medleystart = song.beattoseconds(medleyseg[0])
     medleyend = song.beattoseconds(medleyseg[1])
     await commitplay(song)
-    setTimeout(startcountdown,900)
+}
+
+function running() {
+    if (medleymode) startcountdown()
+}
+
+function failed() {
+    if (medleymode) stopplay()
 }
 
 let secs
